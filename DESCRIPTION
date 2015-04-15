@@ -2,13 +2,12 @@ Package: edge
 Type: Package
 Title: Extraction of Differential Gene Expression
 Date: 2015-03-26
-Version: 0.99.4
+Version: 1.99.0
 Authors@R: c( person("John D.", "Storey", email =
         "jstorey@princeton.edu", role = c("aut", "cre", "cph")),
         person("Jeffrey T.", "Leek", email = "jleek@jhsph.edu ", role =
         c("aut")), person("Andrew J.", "Bass", email =
         "ajbass@princeton.edu", role = c("aut")) )
-Maintainer: John D. Storey <jstorey@princeton.edu>
 biocViews: MultipleComparison, DifferentialExpression, TimeCourse,
         Regression, GeneExpression, DataImport
 Description: The edge package implements methods for carrying out
@@ -30,5 +29,3 @@ LazyData: true
 License: GPL
 Copyright: 2005-2015 John D. Storey
 NeedsCompilation: yes
-Author: John D. Storey [aut, cre, cph], Jeffrey T. Leek [aut], Andrew
-        J. Bass [aut]
