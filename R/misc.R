@@ -1,5 +1,5 @@
 bootstrap <- function(object, obs.fit, clustParms = NULL, bs.its = 100,
-                      verbose = TRUE) {
+                      verbose = TRUE, mod.F = FALSE, post.var = NULL) {
   n.probes <- nrow(obs.fit@res.full)
   nf <- mod.df(object@full.matrix)
   null.stat <- matrix(nrow = n.probes,
@@ -15,8 +15,10 @@ bootstrap <- function(object, obs.fit, clustParms = NULL, bs.its = 100,
     null.fit <- fit_models(object,
                            stat.type = sType)
     if (sType == "lrt") {
-      null.stat[, i]  <-  lrtStat(resNull = null.fit@res.null,
-                                  resFull = null.fit@res.full)
+      null.stat[, i] <- lrtStat(resNull = null.fit@res.null,
+                                resFull = null.fit@res.full,
+                                post.var = post.var)
+      
     }
     else {
       null.stat[, i]  <- odpStat(n.res = null.fit@res.null,

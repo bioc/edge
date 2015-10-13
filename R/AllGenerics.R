@@ -11,11 +11,14 @@
 #' statistics from the null distribution. In the "bootstrap" case, empirical
 #' p-values are calculated using the observed and null statistics (see
 #' \code{\link{empPvals}}). Default is "normal".
+#' @param weights \code{matrix}: weights for each observation. Default is NULL.
 #' @param bs.its \code{integer}: number of null statistics generated (only
 #' applicable for "bootstrap" method). Default is 100.
 #' @param seed \code{integer}: set the seed value. Default is NULL.
 #' @param verbose \code{boolean}: print iterations for bootstrap method.
 #' Default is TRUE.
+#' @param mod.F \code{boolean}: Moderated F-test, recommended for experiments
+#' with a small sample size. Default is FALSE.
 #' @param ... Additional arguments for \code{\link{apply_qvalue}} and
 #' \code{\link{empPvals}} function.
 #'
@@ -72,8 +75,9 @@
 #'
 #' @export
 setGeneric("lrt", function(object, de.fit,
-                           nullDistn = c("normal","bootstrap"), bs.its = 100,
-                           seed = NULL, verbose = TRUE, ...)
+                           nullDistn = c("normal","bootstrap"), weights = NULL,
+                           bs.its = 100, seed = NULL, verbose = TRUE,
+                           mod.F = FALSE, ...)
   standardGeneric("lrt"))
 
 
@@ -88,6 +92,7 @@ setGeneric("lrt", function(object, de.fit,
 #' @param de.fit \code{S4 object}: \code{\linkS4class{deFit}}. Optional.
 #' @param odp.parms \code{list}: parameters for each cluster. See
 #' \code{\link{kl_clust}}.
+#' @param weights \code{matrix}: weights for each observation. Default is NULL.
 #' @param bs.its \code{numeric}: number of null bootstrap iterations. Default
 #' is 100.
 #' @param n.mods \code{integer}: number of clusters used in
@@ -160,7 +165,7 @@ setGeneric("lrt", function(object, de.fit,
 #' \code{\linkS4class{deSet}}
 #'
 #' @export
-setGeneric("odp", function(object, de.fit, odp.parms = NULL, bs.its = 100,
+setGeneric("odp", function(object, de.fit, odp.parms = NULL, weights = NULL, bs.its = 100,
                            n.mods = 50, seed = NULL, verbose = TRUE, ...)
   standardGeneric("odp"))
 
@@ -253,6 +258,7 @@ setGeneric("kl_clust", function(object, de.fit = NULL, n.mods = 50)
 #' @param object \code{S4 object}: \code{\linkS4class{deSet}}.
 #' @param stat.type \code{character}: type of statistic to be used. Either
 #' "lrt" or "odp". Default is "lrt".
+#' @param weights \code{matrix}: weights for each observation. Default is NULL.
 #'
 #' @details
 #' If "odp" method is implemented then the null model is removed from the full 
@@ -310,7 +316,7 @@ setGeneric("kl_clust", function(object, de.fit = NULL, n.mods = 50)
 #' @author John Storey
 #' @exportMethod fit_models
 setGeneric("fit_models",
-           function(object, stat.type = c("lrt", "odp")) {
+           function(object, stat.type = c("lrt", "odp"), weights = NULL) {
              standardGeneric("fit_models")
            })
 
@@ -512,6 +518,97 @@ setGeneric("apply_sva", function(object, ...)
 #' @export
 setGeneric("apply_snm", function(object, int.var=NULL, ...)
   standardGeneric("apply_snm"))
+
+
+#' Non-Parametric Jackstraw for Principal Component Analysis (PCA)
+#'
+#' Estimates statistical significance of association between variables and
+#' their principal components (PCs).
+#'
+#' @param object \code{S4 object}: \code{\linkS4class{deSet}}
+#' @param PC a numeric vector of principal components of interest. Choose a subset of r significant PCs to be used.
+#' @param r a number (a positive integer) of significant principal components.
+#' @param s a number (a positive integer) of synthetic null variables. Out of m variables, s variables are independently permuted.
+#' @param B a number (a positive integer) of resampling iterations. There will be a total of s*B null statistics.
+#' @param covariate a data matrix of covariates with corresponding n observations.
+#' @param verbose a logical indicator as to whether to print the progress.
+#' @param seed a seed for the random number generator.
+#' 
+#' @details 
+#' This function computes m p-values of linear association between m variables
+#' and their PCs. Its resampling strategy accounts for the over-fitting
+#' characteristics due to direct computation of PCs from the observed data
+#' and protects against an anti-conservative bias.
+#' 
+#' Provide the \code{\linkS4class{deSet}},
+#' with m variables as rows and n observations as columns. Given that there are
+#' r significant PCs, this function tests for linear association between m
+#' varibles and their r PCs.
+#'
+#' You could specify a subset of significant PCs
+#' that you are interested in (PC). If PC is given, then this function computes
+#' statistical significance of association between m variables and PC, while
+#' adjusting for other PCs (i.e., significant PCs that are not your interest).
+#' For example, if you want to identify variables associated with 1st and 2nd
+#' PCs, when your data contains three significant PCs, set r=3 and PC=c(1,2). 
+#' 
+#' Please take a careful look at your data and use appropriate graphical and
+#' statistical criteria to determine a number of significant PCs, r. The number
+#' of significant PCs depends on the data structure and the context. In a case
+#' when you fail to specify r, it will be estimated from a permutation test
+#' (Buja and Eyuboglu, 1992) using a function \code{\link{permutationPA}}.
+#' 
+#' If s is not supplied, s is set to about 10% of m variables. If B is not
+#' supplied, B is set to m*10/s.
+#' 
+#' @return \code{apply_jackstraw} returns a \code{list} containing the following
+#' slots:
+#' \itemize{
+#' \item{\code{p.value} the m p-values of association tests between variables
+#' and their principal components}
+#' \item{\code{obs.stat} the observed F-test statistics}
+#' \item{\code{null.stat} the s*B null F-test statistics}
+#' }
+#' 
+#'
+#' @references
+#' Chung and Storey (2013) Statistical Significance of
+#' Variables Driving Systematic Variation in
+#' High-Dimensional Data. arXiv:1308.6013 [stat.ME]
+#' \url{http://arxiv.org/abs/1308.6013}
+#'
+#'More information available at \url{http://ncc.name/}
+#'
+#' @examples
+# import data
+#' library(splines)
+#' data(kidney)
+#' age <- kidney$age
+#' sex <- kidney$sex
+#' kidexpr <- kidney$kidexpr
+#' cov <- data.frame(sex = sex, age = age)
+
+#' # create models
+#' null_model <- ~sex
+#' full_model <- ~sex + ns(age, df = 4)
+
+#' # create deSet object from data
+#' de_obj <- build_models(data = kidexpr, cov = cov, null.model = null_model,
+#'                       full.model = full_model)
+#' ## apply the jackstraw
+#' out = apply_jackstraw(de_obj, PC=1, r=1)
+#' ## Use optional arguments
+#' ## For example, set s and B for a balance between speed of the algorithm and accuracy of p-values
+#' ## out = apply_jackstraw(dat, PC=1, r=1, s=10, B=1000, seed=5678)
+#'
+#' @seealso \code{\link{permutationPA}}
+#'
+#' @author Neo Christopher Chung \email{nc@@princeton.edu}
+#' @import jackstraw
+#' @export
+setGeneric("apply_jackstraw", function(object, PC = NULL, r = NULL, s = NULL, B = NULL,
+                                       covariate = NULL, verbose = TRUE, seed = NULL)
+  standardGeneric("apply_jackstraw"))
 
 #' Full model equation
 #'
