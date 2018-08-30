@@ -18,8 +18,9 @@ of tools for gene expression analysis.
 
 To install the Bioconductor release version, open R and type:
 ```R
-source("http://bioconductor.org/biocLite.R")
-biocLite("edge")
+if (!requireNamespace("BiocManager", quietly=TRUE))
+    install.packages("BiocManager")
+BiocManager::install("edge")
 ```
 
 To install the development version, open R and type:
