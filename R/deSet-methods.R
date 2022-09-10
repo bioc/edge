@@ -71,7 +71,7 @@ setMethod("odp",
               set.seed(seed)
             }
             if (is.null(odp.parms)) {
-              odp.parms <- kl_clust(object, de.fit = de.fit, 
+              odp.parms <- kl_clust(object, de.fit = de.fit,
                                     n.mods = n.mods)
             } else if (sum(!(names(odp.parms) %in% c("mu.full", "sig.full",
                                                      "mu.null", "sig.null",
@@ -136,7 +136,7 @@ setMethod("lrt",
               prior.df <- out$df.prior
             }
             stat <- lrtStat(resNull = de.fit@res.null,
-                            resFull = de.fit@res.full, 
+                            resFull = de.fit@res.full,
                             post.var = post.var)
             # If nullDistn is normal then return p-values from F-test else
             # return empirical p-values from qvalue package
@@ -344,14 +344,14 @@ setMethod("apply_snm",
             object
           })
 
-
-#' @rdname apply_jackstraw
-setMethod("apply_jackstraw",
-          signature = signature(object="deSet"),
-          function(object, r1 = NULL, r = NULL, s = NULL, B = NULL,
-                   covariate = NULL, verbose = TRUE, seed = NULL) {
-            dat <- exprs(object)
-            js <- jackstraw::jackstraw_pca(dat, r1 = r1, r = r, s = s, B = B,
-                      covariate = covariate, verbose = verbose, seed = seed)
-            return(js)
-          })
+#
+# # @rdname apply_jackstraw
+# setMethod("apply_jackstraw",
+#           signature = signature(object="deSet"),
+#           function(object, r1 = NULL, r = NULL, s = NULL, B = NULL,
+#                    covariate = NULL, verbose = TRUE, seed = NULL) {
+#             dat <- exprs(object)
+#             js <- jackstraw::jackstraw_pca(dat, r1 = r1, r = r, s = s, B = B,
+#                       covariate = covariate, verbose = verbose, seed = seed)
+#             return(js)
+#           })
