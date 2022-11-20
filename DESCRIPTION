@@ -5,7 +5,7 @@ Date: 2015-04-15
 Version: 2.30.0
 Author: John D. Storey, Jeffrey T. Leek and Andrew J. Bass
 Maintainer: John D. Storey <jstorey@princeton.edu>, Andrew J. Bass
-    <ajbass@princeton.edu>
+    <ajbass@emory.edu>
 biocViews: MultipleComparison, DifferentialExpression, TimeCourse,
     Regression, GeneExpression, DataImport
 Description: The edge package implements methods for carrying out differential
