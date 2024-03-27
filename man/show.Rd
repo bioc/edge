@@ -16,7 +16,6 @@ show(object)
 \arguments{
 \item{object}{\code{S4 object}: \code{\linkS4class{deSet}}}
 
-\item{\dots}{additional parameters}
 }
 \value{
 Nothing of interest

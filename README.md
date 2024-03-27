@@ -10,7 +10,7 @@ testing using the optimal discovery procedure and generalized likelihood
 ratio tests (equivalent to F-tests and t-tests) are implemented for general study
 designs. Special functions are available to facilitate the analysis of
 common study designs, including time course experiments. Other packages
-such as [snm](http://www.bioconductor.org/packages/release/bioc/html/snm.html), [sva](http://www.bioconductor.org/packages/release/bioc/html/sva.html), and [qvalue](https://github.com/jdstorey/qvalue) are integrated in edge to provide a wide range
+such as  [sva](http://www.bioconductor.org/packages/release/bioc/html/sva.html) and [qvalue](https://github.com/jdstorey/qvalue) are integrated in edge to provide a wide range
 of tools for gene expression analysis.
 
 
@@ -44,7 +44,6 @@ browseVignettes("edge")
 * `fit_models`
 * `kl_clust`
 * `apply_sva`
-* `apply_snm`
 * `apply_qvalue`
 
 ### Quick start guide
@@ -80,9 +79,8 @@ full_model <- ~sex + ns(age, df=4)
 edge_obj <- build_models(data = kidexpr, cov = cov, null.model = null_model, full.model = full_model)
 ```
 
-The `cov` is a data frame of covariates, the `null.model` is the null model and the `full.model` is the alternative model. The input `cov` is a data frame with the column names the same as the variables in the alternative and null models. Once the models have been generated, it is often useful to normalize the gene expression matrix using `apply_snm` and/or adjust for unmodelled variables using `apply_sva`.
+The `cov` is a data frame of covariates, the `null.model` is the null model and the `full.model` is the alternative model. The input `cov` is a data frame with the column names the same as the variables in the alternative and null models. Once the models have been generated, it is often useful to adjust for unmodelled variables using `apply_sva`.
 ```R
-edge_norm <- apply_snm(edge_obj, int.var=1:ncol(exprs(edge_obj)), diagnose=FALSE)
 edge_sva <- apply_sva(edge_norm)
 
 ```

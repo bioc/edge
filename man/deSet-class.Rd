@@ -8,7 +8,7 @@
 The \code{deSet} class extends the \code{\link{ExpressionSet}} class.
 While the \code{ExpressionSet} class contains information about the
 experiment, the \code{deSet} class contains both experimental information and
-additional information relevant for differential expression analysis, 
+additional information relevant for differential expression analysis,
 explained below in Slots.
 }
 \section{Slots}{
@@ -50,8 +50,6 @@ See \code{\link{ExpressionSet}} for additional slot information.
  method of least squares.}
  \item{\code{apply_qvalue(deSet, ...)}}{Applies \code{\link{qvalue}}
  function.}
- \item{\code{apply_snm(deSet, ...)}}{Applies surpervised normalization of
-  microarrays (\code{\link{snm}}) on gene expression data.}
  \item{\code{apply_sva(deSet, ...)}}{Applies surrogate variable analysis
  (\code{\link{sva}}).}
  \item{\code{fullMatrix(deSet)}}{Access and set full matrix.}

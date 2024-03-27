@@ -471,53 +471,6 @@ setGeneric("apply_qvalue", function(object, ...)
 setGeneric("apply_sva", function(object, ...)
   standardGeneric("apply_sva"))
 
-#' Supervised normalization of data in edge
-#'
-#' Runs \code{snm} on a deSet object based on the null and full models in
-#' \code{\linkS4class{deSet}}. See \code{\link{snm}} for additional details
-#' on the algorithm.
-#'
-#' @param object \code{S4 object}: \code{\linkS4class{deSet}}
-#' @param int.var \code{data frame}: intensity-dependent effects (see
-#'   \code{\link{snm}} for details)
-#' @param ... Additional arguments for \code{\link{snm}}
-#'
-#' @return \code{apply_snm} returns a \code{\linkS4class{deSet}} object where
-#' assayData (the expression data) that has been passed to apply_snm is replaced
-#' with the normalized data that \code{\link{snm}} returns.  Specifically,
-#' \code{exprs(object)} is replaced by \code{$norm.dat} from \code{\link{snm}},
-#' where \code{object} is the \code{\link{deSet}} object.
-#'
-#' @references
-#' Mechan BH, Nelson PS, Storey JD. Supervised normalization of microarrays.
-#' Bioinformatics 2010;26:1308-1315.
-#'
-#' @examples
-#' # simulate data
-#' library(snm)
-#' singleChannel <- sim.singleChannel(12345)
-#' data <- singleChannel$raw.data
-#'
-#' # create deSet object using build_models (can use ExpressionSet see manual)
-#' cov <- data.frame(grp = singleChannel$bio.var[,2])
-#' full_model <- ~grp
-#' null_model <- ~1
-#'
-#' # create deSet object using build_models
-#' de_obj <- build_models(data = data, cov = cov, full.model = full_model,
-#' null.model = null_model)
-#'
-#' # run snm using intensity-dependent adjustment variable
-#' de_snm <- apply_snm(de_obj, int.var = singleChannel$int.var,
-#' verbose = FALSE, num.iter = 1)
-#'
-#' @seealso \code{\linkS4class{deSet}}, \code{\link{odp}} and
-#' \code{\link{lrt}}
-#'
-#' @author John Storey, Andrew Bass
-#' @export
-setGeneric("apply_snm", function(object, int.var=NULL, ...)
-  standardGeneric("apply_snm"))
 
 #' Full model equation
 #'

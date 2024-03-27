@@ -324,25 +324,7 @@ setMethod("apply_sva",
             object
           })
 
-#' @rdname apply_snm
-setMethod("apply_snm",
-          signature = signature(object="deSet"),
-          function(object, int.var=NULL, ...) {
-            full.matrix <- object@full.matrix
-            null.matrix <- object@null.matrix
-            full.matrix <- full.matrix - projMatrix(null.matrix) %*% full.matrix
-            full.matrix <- as.matrix(rm.zero.cols(full.matrix))
-            if(is.null(int.var)) {
-              int.var <- 1:ncol(exprs(object))
-              warning("Setting int.var=1:n where n is number of samples.")
-            }
-            exprs(object) <- snm(exprs(object),
-                                       bio.var = full.matrix,
-                                       adj.var = null.matrix,
-                                       int.var = int.var, ...)$norm.dat
-            validObject(object)
-            object
-          })
+
 
 #
 # # @rdname apply_jackstraw

@@ -8,7 +8,7 @@
 #' ratio tests (equivalent to F-tests and t-tests) are implemented for general study
 #' designs. Special functions are available to facilitate the analysis of
 #' common study designs, including time course experiments. Other packages
-#' such as snm, sva, and qvalue are integrated in edge to provide a wide range
+#' such as sva and qvalue are integrated in edge to provide a wide range
 #' of tools for gene expression analysis.
 #'
 #' @examples
@@ -18,7 +18,7 @@
 #' @name edge
 #' @author John Storey, Jeffrey Leek, Andrew Bass
 #' @docType package
-#' @import Biobase methods splines sva snm qvalue MASS
+#' @import Biobase methods splines sva qvalue MASS
 #' @useDynLib edge odpScoreCluster kldistance
 NULL
 

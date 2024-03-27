@@ -124,8 +124,6 @@ deFitCheck <- function(object) {
 #'  method of least squares.}
 #'  \item{\code{apply_qvalue(deSet, ...)}}{Applies \code{\link{qvalue}}
 #'  function.}
-#'  \item{\code{apply_snm(deSet, ...)}}{Applies surpervised normalization of
-#'   microarrays (\code{\link{snm}}) on gene expression data.}
 #'  \item{\code{apply_sva(deSet, ...)}}{Applies surrogate variable analysis
 #'  (\code{\link{sva}}).}
 #'  \item{\code{fullMatrix(deSet)}}{Access and set full matrix.}

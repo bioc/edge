@@ -78,7 +78,7 @@ testing using the optimal discovery procedure and generalized likelihood
 ratio test (equivalent to F-tests and t-tests) are implemented for general study
 designs. Special functions are available to facilitate the analysis of
 common study designs, including time course experiments. Other packages
-such as {\tt snm}, {\tt sva}, and {\tt qvalue} are integrated in \edge to
+such as {\tt sva} and {\tt qvalue} are integrated in \edge to
 provide a wide range of tools for gene expression analysis.
 
 \edge performs significance analysis by using a framework developed by
@@ -107,7 +107,7 @@ time course experiments and other complex study designs. Specifically,
 \cite{storey:2005} developed a procedure that simplifies the modelling process
 for time course experiments. In addition to identifying differentially
 expressed genes in multi-class, time course, and general study designs, \edge
-includes implementations of popular packages such as {\tt snm}, {\tt sva} and
+includes implementations of popular packages such as {\tt sva} and
 {\tt qvalue} to help simplify the analysis process for researchers.
 
 The rest of the document details how to use \edge in three different case
@@ -153,9 +153,6 @@ experiments, see section~\ref{sec:citepackage}.
 
 \bibentry{Leek:2008qf}
 
-{\bf When reporting results involving supervised normalization of microarrays ({\tt apply\_snm}), please cite:}
-
-\bibentry{mecham:2010}
 
 {\bf To cite the {\tt edge} R package itself, please type the following to retrieve the citation:}
 
@@ -1314,59 +1311,6 @@ lfdr <- qval_obj$lfdr
 pvals <- qval_obj$pvalues
 pi0 <- qval_obj$pi0
 @
-
-\section{{\tt snm}: Supervised normalization of microarray data}
-\label{sec:snm}
-There has been a lot of work done on separating signal from confounding
-factors, but a lot of algorithms fail to consider both the models of the study
-and the technical factors such as batch or array processing date. The {\tt snm}
-package allows for supervised normalization of microarrays on a gene expression
-matrix. It takes into account both the experimental models and other technical
-factors in the experiments. Details on the algorithm can be found in
-\cite{mecham:2010}. The {\tt snm} package is implemented in the
-{\tt apply\_snm} function. Continuing the analysis on the {\tt kidney} study
-in~\ref{sec:kidney}:
-<<build_study_kidsnmn, dependson="import_data_kidney", cache=TRUE>>=
-library(splines)
-cov <- data.frame(sex = sex, age = age)
-null_model <- ~sex
-full_model <- ~sex + ns(age, df=4)
-de_obj <- build_models(data = kidexpr, cov = cov, full.model = full_model, null.model = null_model)
-@
-Now that we have created {\tt de\_obj}, we can adjust for additional array
-effects, dye effects and other intensity-dependent effects.  In this example,
-we created array effects that are not existent in the real data set in order to
-show how to use the function:
-<<edgeSNM2, dependson="build_study_kidsnmn">>=
-int.var <- data.frame(array.effects = as.factor(1:72))
-de_snm <- apply_snm(de_obj, int.var = int.var, num.iter = 2, diagnose = FALSE, verbose = FALSE)
-@
-The {\tt int.var} is where the data frame of intensity-dependent effects are
-inputted, {\tt diagnose} is a flag to let the software know whether to produce
-diagnostic plots. Additional arguments can be found by typing {\tt ?apply\_snm}.
-
-Once the data has been normalized, we can access the normalized matrix by
-using {\tt exprs}:
-<<snm_exprs>>=
-norm.matrix <- exprs(de_obj)
-@
-
-To run the significance analysis, {\tt odp} or {\tt lrt} can be used:
-<<snm_odp2>>=
-de_odp <- odp(de_snm, bs.its = 50, verbose=FALSE)
-summary(de_odp)
-@
-
-And to extract the $\pi_{0}$ estimate, q-values, local false discovery
-rates and p-values:
-<<d_eres>>==
-qval_obj <- qvalueObj(de_odp)
-qvals <- qval_obj$qvalues
-lfdr <- qval_obj$lfdr
-pvals <- qval_obj$pvalues
-pi0 <- qval_obj$pi0
-@
-
 
 \section{{\tt qvalue}: Estimate the q-values}
 \label{sec:qvalue}
