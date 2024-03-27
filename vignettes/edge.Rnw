@@ -147,6 +147,9 @@ experiments, see section~\ref{sec:citepackage}.
 % number of hypothesis tests. This paper introduces a computationally efficient
 % implementation of ODP that this package is based on.
 
+\bibentry{Bass2020}
+% An extension of the ODP to complex study designs (e.g., time course studies) and RNA-Seq studies.
+
 {\bf When reporting results involving surrogate variable analysis ({\tt apply\_sva}), please cite:}
 
 \bibentry{leek:2007}
@@ -1354,7 +1357,7 @@ significance analysis. The {\tt deSet} inherits all the slots from an
 The rest of this section is for advanced users because it requires knowledge
 of full and null model creation. To begin, lets create an {\tt ExpressionSet}
 object from the {\tt kidney} dataset:
-<<kidney_expSet, tidy=FALSE, eval=TRUE, cache=TRUE, dependson=c("crtx","import_data")>>==
+<<kidney_expSet, tidy=FALSE, eval=TRUE, cache=TRUE, dependson=c("kidney_import_data")>>==
 library(edge)
 anon_df <- as(data.frame(age=age, sex=sex), "AnnotatedDataFrame")
 exp_set <- ExpressionSet(assayData = kidexpr, phenoData = anon_df)
@@ -1378,7 +1381,7 @@ done above.
 
 Having both {\tt expSet} and the hypothesis models, the function {\tt deSet}
 can be used to create an {\tt deSet} object:
-<<cr_deSet, dependson=c("kidneyModel","kidney_expSet")>>==
+<<cr_deSet, dependson=c("kidney_expSet")>>==
 de_obj <- deSet(exp_set, full.model = full_model, null.model = null_model)
 slotNames(de_obj)
 @
